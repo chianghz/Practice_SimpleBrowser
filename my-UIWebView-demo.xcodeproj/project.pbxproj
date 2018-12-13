@@ -54,14 +54,54 @@
 		1C76FDE721C22D2500CE3F54 /* my-UIWebView-demo */ = {
 			isa = PBXGroup;
 			children = (
+				1C76FDFC21C22E7800CE3F54 /* Resource */,
+				1C76FDFA21C22E7800CE3F54 /* Extensions */,
 				1C76FDE821C22D2500CE3F54 /* AppDelegate.swift */,
-				1C76FDEA21C22D2500CE3F54 /* ViewController.swift */,
-				1C76FDEC21C22D2500CE3F54 /* Main.storyboard */,
-				1C76FDEF21C22D2600CE3F54 /* Assets.xcassets */,
-				1C76FDF121C22D2600CE3F54 /* LaunchScreen.storyboard */,
-				1C76FDF421C22D2600CE3F54 /* Info.plist */,
+				1C76FDFE21C22E7900CE3F54 /* Model */,
+				1C76FDFF21C22E7900CE3F54 /* View */,
+				1C76FDFB21C22E7800CE3F54 /* ViewController */,
 			);
 			path = "my-UIWebView-demo";
+			sourceTree = "<group>";
+		};
+		1C76FDFA21C22E7800CE3F54 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		1C76FDFB21C22E7800CE3F54 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				1C76FDEA21C22D2500CE3F54 /* ViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		1C76FDFC21C22E7800CE3F54 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				1C76FDF421C22D2600CE3F54 /* Info.plist */,
+				1C76FDEF21C22D2600CE3F54 /* Assets.xcassets */,
+				1C76FDF121C22D2600CE3F54 /* LaunchScreen.storyboard */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		1C76FDFE21C22E7900CE3F54 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1C76FDFF21C22E7900CE3F54 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1C76FDEC21C22D2500CE3F54 /* Main.storyboard */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,7 +324,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 953B9L7WW6;
-				INFOPLIST_FILE = "my-UIWebView-demo/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/my-UIWebView-demo/Resource/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -302,7 +342,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 953B9L7WW6;
-				INFOPLIST_FILE = "my-UIWebView-demo/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/my-UIWebView-demo/Resource/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
