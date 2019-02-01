@@ -17,13 +17,31 @@ class MainViewController: UIViewController {
   
   // MARK: -- Constants --
   
-  private let defaultWebsiteUrl = "https://www.youtube.com"
+  private let KEY__LAST_WEBSITE       = "KEY__LAST_WEBSITE"
+  
+  private let defaultActionBarHeight  : CGFloat = 94.0
+  
   
   // MARK: -- Public Properties --
   
   // MARK: -- Internal Properties --
   
   // MARK: -- Private Properties --
+  
+  private var lastBrowsingWebsiteURL : URL? {
+    get {
+      return UserDefaults.standard.url(forKey: KEY__LAST_WEBSITE)
+    }
+    set {
+      UserDefaults.standard.set(newValue, forKey: KEY__LAST_WEBSITE)
+    }
+  }
+  
+  
+  private var beginDraggingPositionY        : CGFloat?
+  
+  private var beginDraggingActionBarHeight  : CGFloat?
+  
   
   // MARK: -- Enums --
   
@@ -38,8 +56,12 @@ class MainViewController: UIViewController {
   
   // MARK: -- UI --
   
-  @IBOutlet weak var myWebTitleView: UIView!
+  @IBOutlet weak var myActionBar: UIView!
   
+  @IBOutlet weak var myActionBarHeightConstraint: NSLayoutConstraint!
+  
+  
+  @IBOutlet weak var lblWebsiteTitle: UILabel!
   
   @IBOutlet weak var btnGoBack: UIButton!
   
@@ -51,6 +73,11 @@ class MainViewController: UIViewController {
   
   
   @IBOutlet weak var myWebView: WKWebView!
+  
+  
+  @IBOutlet var bigActionBarViews: [UIView]!
+  
+  @IBOutlet var smallActionBarViews: [UIView]!
   
   
   // MARK: -- Actions --
@@ -90,6 +117,11 @@ extension MainViewController {
     
     // -- init Layout --
 
+    myActionBarHeightConstraint.constant = defaultActionBarHeight
+    
+    lblWebsiteTitle.text = ""
+    lblWebsiteTitle.alpha = 0
+    
     btnGoBack.isEnabled = false
     btnGoFoward.isEnabled = false
     
@@ -98,13 +130,14 @@ extension MainViewController {
     myTextField.returnKeyType = .go
 
     // -- init Data --
-    myTextField.text = defaultWebsiteUrl
-    go()
+    
+    go(lastBrowsingWebsiteURL)
     
     // -- init Delegate --
     
     myTextField.delegate = self
     myWebView.navigationDelegate = self
+    myWebView.scrollView.delegate = self
     
   }
   
@@ -121,11 +154,18 @@ extension MainViewController {
 
   // MARK: -- Internal Functions --
 
-  // MARK: -- Private Functions --
+  // MARK: -- Private Functions (Action) --
   
-  private func go() {
+  private func go(_ url: URL? = nil) {
     self.view.endEditing(true)
+
+    // Go with url
+    if url != nil {
+      myWebView.load(URLRequest(url: url!))
+      return
+    }
     
+    // Go with string
     guard let urlString = myTextField.text, urlString != "" else { return }
     
     var finalString = ""
@@ -139,7 +179,30 @@ extension MainViewController {
       myWebView.load(URLRequest(url: url))
     }
   }
-
+  
+  // MARK: -- Private Functions (Layout) --
+  
+  private func updateActionBarHeight(_ height: CGFloat) {
+    var newHeight = min(height, defaultActionBarHeight)
+    newHeight = max(newHeight, 20)
+    myActionBarHeightConstraint.constant = newHeight
+    
+    let alpha = (newHeight - 20) / (defaultActionBarHeight-20)
+    _ = bigActionBarViews.map({ $0.alpha = alpha })
+    _ = smallActionBarViews.map({ $0.alpha = 1-alpha })
+  }
+  
+  private func enlargeActionBarWithAnimation() {
+    
+    UIView.animate(withDuration: 0.25) {
+      self.myActionBarHeightConstraint.constant = self.defaultActionBarHeight
+      self.view.layoutIfNeeded()
+      
+      _ = self.bigActionBarViews.map({ $0.alpha = 1 })
+      _ = self.smallActionBarViews.map({ $0.alpha = 0 })
+    }
+  }
+  
 }
 
 
@@ -149,7 +212,7 @@ extension MainViewController {
 
 extension MainViewController: UITextFieldDelegate {
   
-  // MARK: -- UITextFieldDelegate  --
+  // MARK: -- UITextFieldDelegate --
   
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     self.go()
@@ -160,7 +223,9 @@ extension MainViewController: UITextFieldDelegate {
 }
 
 extension MainViewController: WKNavigationDelegate {
-  
+
+  // MARK: -- WKNavigationDelegate --
+
   func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
     self.view.makeToast(error.localizedDescription)
     self.myIndicator.stopAnimating()
@@ -176,9 +241,49 @@ extension MainViewController: WKNavigationDelegate {
   func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
     self.myIndicator.stopAnimating()
     
+    self.lblWebsiteTitle.text = webView.title ?? ""
     self.myTextField.text = webView.url?.absoluteString ?? ""
     self.btnGoBack.isEnabled = webView.canGoBack
     self.btnGoFoward.isEnabled = webView.canGoForward
+    
+    lastBrowsingWebsiteURL = webView.url
+  }
+  
+}
+
+extension MainViewController: UIScrollViewDelegate {
+  
+  // MARK: -- UIScrollViewDelegate --
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    guard let positionY = beginDraggingPositionY, let height = beginDraggingActionBarHeight else { return }
+    
+    if scrollView.contentOffset.y > positionY {  // Scroll Down
+      self.updateActionBarHeight(height - (scrollView.contentOffset.y - positionY))
+    
+    } else {  // Scroll Up
+      let velocity = scrollView.panGestureRecognizer.velocity(in: myWebView)
+      if velocity.y > 1000 {
+        self.enlargeActionBarWithAnimation()
+      }
+    }
+    
+    if (scrollView.contentOffset.y < -20) {  // Bouncing Top
+      self.enlargeActionBarWithAnimation()
+    
+    } else if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height + 20.0)) {  // Bouncing Bottom
+      self.enlargeActionBarWithAnimation()
+    }
+    
+  }
+  
+  func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    beginDraggingPositionY = scrollView.contentOffset.y
+    beginDraggingActionBarHeight = self.myActionBarHeightConstraint.constant
+  }
+  
+  func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+    self.enlargeActionBarWithAnimation()
   }
   
 }

@@ -21,6 +21,12 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Q9-GM-ZPN">
                                 <rect key="frame" x="0.0" y="20" width="375" height="94"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Website Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tnt-1p-azn">
+                                        <rect key="frame" x="145.5" y="0.0" width="84.5" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="4zn-Jl-7Nj">
                                         <rect key="frame" x="0.0" y="8" width="375" height="36"/>
                                         <subviews>
@@ -67,9 +73,6 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="36" id="CrR-0P-6O2"/>
-                                        </constraints>
                                     </stackView>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="NrO-jX-VT2">
                                         <rect key="frame" x="339" y="57" width="20" height="20"/>
@@ -82,16 +85,19 @@
                                     </textField>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="Tnt-1p-azn" firstAttribute="centerX" secondItem="0Q9-GM-ZPN" secondAttribute="centerX" id="DJR-xd-2Xp"/>
                                     <constraint firstItem="4zn-Jl-7Nj" firstAttribute="top" secondItem="0Q9-GM-ZPN" secondAttribute="top" constant="8" id="L01-KV-qDE"/>
                                     <constraint firstItem="NrO-jX-VT2" firstAttribute="leading" secondItem="bxv-5U-m0n" secondAttribute="trailing" constant="8" id="LIA-Bz-GBd"/>
                                     <constraint firstItem="NrO-jX-VT2" firstAttribute="centerY" secondItem="bxv-5U-m0n" secondAttribute="centerY" id="Ohd-eF-vl6"/>
                                     <constraint firstAttribute="bottom" secondItem="bxv-5U-m0n" secondAttribute="bottom" constant="12" id="Pis-z7-7wm"/>
                                     <constraint firstItem="4zn-Jl-7Nj" firstAttribute="leading" secondItem="0Q9-GM-ZPN" secondAttribute="leading" id="WYg-wC-O7e"/>
+                                    <constraint firstAttribute="height" constant="94" id="b89-bd-EXs"/>
                                     <constraint firstItem="bxv-5U-m0n" firstAttribute="centerY" secondItem="4zn-Jl-7Nj" secondAttribute="centerY" id="duq-me-hnZ"/>
                                     <constraint firstItem="bxv-5U-m0n" firstAttribute="leading" secondItem="0Q9-GM-ZPN" secondAttribute="leading" constant="16" id="fu4-xq-Ips"/>
                                     <constraint firstAttribute="trailing" secondItem="NrO-jX-VT2" secondAttribute="trailing" constant="16" id="gKv-Di-zdH"/>
                                     <constraint firstItem="bxv-5U-m0n" firstAttribute="top" secondItem="4zn-Jl-7Nj" secondAttribute="bottom" constant="8" id="mDJ-MU-rLL"/>
                                     <constraint firstItem="bxv-5U-m0n" firstAttribute="leading" secondItem="4zn-Jl-7Nj" secondAttribute="trailing" constant="16" id="tvY-FX-esI"/>
+                                    <constraint firstItem="Tnt-1p-azn" firstAttribute="top" secondItem="0Q9-GM-ZPN" secondAttribute="top" id="ulL-Og-Dp6"/>
                                     <constraint firstAttribute="trailing" secondItem="4zn-Jl-7Nj" secondAttribute="trailing" id="xHH-fo-owh">
                                         <variation key="heightClass=compact" constant="480"/>
                                     </constraint>
@@ -135,10 +141,20 @@
                     <connections>
                         <outlet property="btnGoBack" destination="V2l-FR-KAA" id="FhH-ZK-OW8"/>
                         <outlet property="btnGoFoward" destination="ylu-eM-cFC" id="UrR-vr-zPa"/>
+                        <outlet property="lblWebsiteTitle" destination="Tnt-1p-azn" id="JQc-1v-b1b"/>
+                        <outlet property="myActionBar" destination="0Q9-GM-ZPN" id="TCl-uN-c4C"/>
+                        <outlet property="myActionBarHeightConstraint" destination="b89-bd-EXs" id="PXE-81-TJn"/>
                         <outlet property="myIndicator" destination="NrO-jX-VT2" id="jg6-wW-Xtu"/>
                         <outlet property="myTextField" destination="bxv-5U-m0n" id="DsB-k0-ZKO"/>
-                        <outlet property="myWebTitleView" destination="0Q9-GM-ZPN" id="TCl-uN-c4C"/>
                         <outlet property="myWebView" destination="dW5-q0-f2B" id="XPh-hW-JUH"/>
+                        <outletCollection property="bigActionBarViews" destination="V2l-FR-KAA" collectionClass="NSMutableArray" id="eiK-wY-TYw"/>
+                        <outletCollection property="bigActionBarViews" destination="ylu-eM-cFC" collectionClass="NSMutableArray" id="fC0-w1-x4c"/>
+                        <outletCollection property="bigActionBarViews" destination="jTL-hM-2FJ" collectionClass="NSMutableArray" id="B4G-ZB-3dL"/>
+                        <outletCollection property="bigActionBarViews" destination="17C-DV-2Rw" collectionClass="NSMutableArray" id="YFs-8D-Krp"/>
+                        <outletCollection property="bigActionBarViews" destination="C6Y-5s-GAA" collectionClass="NSMutableArray" id="ysT-ix-7Yd"/>
+                        <outletCollection property="bigActionBarViews" destination="bxv-5U-m0n" collectionClass="NSMutableArray" id="Ntj-fR-GSi"/>
+                        <outletCollection property="bigActionBarViews" destination="NrO-jX-VT2" collectionClass="NSMutableArray" id="vS7-tp-dBC"/>
+                        <outletCollection property="smallActionBarViews" destination="Tnt-1p-azn" collectionClass="NSMutableArray" id="s93-dz-MCn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
